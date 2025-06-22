@@ -7,7 +7,7 @@ import {
   getTransactionsByYear,
   getTransactionsByCategory,
   getTransactionsByType
-} from '../controllers/transaction.controller.js';
+} from '../controllers/transactionController.js';
 
 import { authenticate } from '../middlewares/auth.js';
 
