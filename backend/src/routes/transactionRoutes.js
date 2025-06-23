@@ -6,7 +6,8 @@ import {
   getTransactionsByMonth,
   getTransactionsByYear,
   getTransactionsByCategory,
-  getTransactionsByType
+  getTransactionsByType,
+  updateTransaction
 } from '../controllers/transactionController.js';
 
 import { authenticate } from '../middlewares/auth.js';
@@ -19,6 +20,7 @@ router.use(authenticate);
 // CRUD básico
 router.get('/', getTransactions);
 router.post('/', createTransaction);
+router.put('/:id', updateTransaction);
 router.delete('/:id', deleteTransaction);
 
 // Filtros

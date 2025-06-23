@@ -48,7 +48,8 @@ const PieChart = ({ transacciones }: Props) => {
   }, [transacciones]);
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md">
+    <div className="p-4 bg-white rounded-lg shadow-md w-full max-w-full lg:max-w-md mx-auto">
+
       <h2 className="text-lg font-semibold mb-4">Gastos por categoría</h2>
       {datosPorCategoria.length === 0 ? (
         <p>No hay datos para mostrar.</p>

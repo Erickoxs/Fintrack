@@ -123,6 +123,40 @@ export const getTransactionsByType = async (req, res) => {
   }
 };
 
+export const updateTransaction = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.userId;
+    const { title, amount, type, category, date } = req.body;
+
+    // Validación mínima
+    if (!title || !amount || !type || !category) {
+      return res.status(400).json({ message: 'Faltan campos requeridos' });
+    }
+
+    const updated = await Transaction.findOneAndUpdate(
+      { _id: id, user_id: userId },
+      {
+        title,
+        amount,
+        type,
+        category,
+        date: date ? new Date(date) : new Date()
+      },
+      { new: true } // Devuelve el documento actualizado
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: 'Transacción no encontrada o no autorizada' });
+    }
+
+    res.json({ message: 'Transacción actualizada correctamente', transaction: updated });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al actualizar transacción', error });
+  }
+};
+
+
 
 
 
