@@ -47,6 +47,21 @@ export const createTransaction = async (req, res) => {
       return res.status(400).json({ message: 'Todos los campos obligatorios deben estar presentes' });
     }
 
+    // Validar la categoría
+    const categoriaEncontrada = await Category.findById(category);
+
+    if (!categoriaEncontrada) {
+      return res.status(400).json({ message: 'Categoría no válida' });
+    }
+
+    if (type === 'ingreso' && categoriaEncontrada.name !== 'Ingreso') {
+      return res.status(400).json({ message: 'Las transacciones de tipo ingreso solo pueden tener la categoría "Ingreso"' });
+    }
+
+    if (type === 'gasto' && categoriaEncontrada.name === 'Ingreso') {
+      return res.status(400).json({ message: 'La categoría "Ingreso" no puede usarse para transacciones de tipo gasto' });
+    }
+
     const newTransaction = new Transaction({
       user_id: userId,
       title,
@@ -123,15 +138,31 @@ export const getTransactionsByType = async (req, res) => {
   }
 };
 
+import { Category } from '../models/Category.js'; // Asegúrate de tener este import si no lo tienes ya
+
 export const updateTransaction = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.userId;
     const { title, amount, type, category, date } = req.body;
 
-    // Validación mínima
     if (!title || !amount || !type || !category) {
       return res.status(400).json({ message: 'Faltan campos requeridos' });
+    }
+
+    // Validar la categoría
+    const categoriaEncontrada = await Category.findById(category);
+
+    if (!categoriaEncontrada) {
+      return res.status(400).json({ message: 'Categoría no válida' });
+    }
+
+    if (type === 'ingreso' && categoriaEncontrada.name !== 'Ingreso') {
+      return res.status(400).json({ message: 'Las transacciones de tipo ingreso solo pueden tener la categoría "Ingreso"' });
+    }
+
+    if (type === 'gasto' && categoriaEncontrada.name === 'Ingreso') {
+      return res.status(400).json({ message: 'La categoría "Ingreso" no puede usarse para transacciones de tipo gasto' });
     }
 
     const updated = await Transaction.findOneAndUpdate(

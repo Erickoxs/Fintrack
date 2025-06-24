@@ -31,8 +31,17 @@ const categorias = [
     name: 'Otros',
     icon: '📦',
     color: '#6b7280'
-  }
+  },
+   {
+        "_id": "685ac451cfffd5fb2024314e",
+        "name": "Ingreso",
+        "icon": "💰",
+        "color": "#2ecc71",
+    }
 ];
+
+
+
 
 const EditModal = ({ transaccion, onGuardar, onCerrar }: Props) => {
   const [form, setForm] = useState({
@@ -52,6 +61,10 @@ const EditModal = ({ transaccion, onGuardar, onCerrar }: Props) => {
       date: new Date(transaccion.date).toISOString().split('T')[0],
     });
   }, [transaccion]);
+
+  const categoriasFiltradas = form.type === 'ingreso'
+  ? categorias.filter(cat => cat.name === 'Ingreso')
+  : categorias.filter(cat => cat.name !== 'Ingreso');
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -127,11 +140,12 @@ const EditModal = ({ transaccion, onGuardar, onCerrar }: Props) => {
             required
           >
             <option value="">Selecciona una categoría</option>
-            {categorias.map(cat => (
-              <option key={cat._id} value={cat._id}>
-                {cat.icon} {cat.name}
-              </option>
-            ))}
+            {categoriasFiltradas.map(cat => (
+  <option key={cat._id} value={cat._id}>
+    {cat.icon} {cat.name}
+  </option>
+))}
+
           </select>
         </div>
 
